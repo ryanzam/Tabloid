@@ -6,10 +6,10 @@ using WebJournal.Model;
 
 namespace WebJournal.Data
 {
-    public interface IPostRepo
+    public class IEntityRepositiory
     {
-        IEnumerable<Post> GetPosts();
-        Post GetPost(int id);
+        IEnumerable<Category> GetCategories();
+        Category GetCategory(int id);
         void CreatePost(Post post);
         void UpdatePost(Post post);
         void DeletePost(Post post);

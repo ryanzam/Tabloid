@@ -17,7 +17,6 @@ namespace WebJournal.Controllers
         private readonly IPostRepo _repository;
         private readonly IMapper _mapper;
 
-        private JournalContext _context;
         public PostController(IPostRepo repository, IMapper mapper)
         {
             _repository = repository;
@@ -63,7 +62,7 @@ namespace WebJournal.Controllers
                 return NotFound();
             }
 
-            var postReadDTO = _mapper.Map<PostupdateDTO>(postModelRepo);
+            _mapper.Map(postupdateDTO, postModelRepo);
 
             _repository.UpdatePost(postModelRepo);
             _repository.SaveChanges();

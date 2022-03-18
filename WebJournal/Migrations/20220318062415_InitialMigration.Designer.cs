@@ -10,8 +10,8 @@ using WebJournal.Model;
 namespace WebJournal.Migrations
 {
     [DbContext(typeof(JournalContext))]
-    [Migration("20220317134822_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220318062415_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,9 @@ namespace WebJournal.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");

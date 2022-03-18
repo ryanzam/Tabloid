@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebJournal.Model;
+using WebJournal.Data.Posts;
 
-namespace WebJournal.Data
+namespace WebJournal.Data.Posts
 {
-    public class PostRepo : IPostRepo
+    public class PostRepo : BaseRepository<Post>, IPostRepo
     {
         private readonly JournalContext _context;
 
-        public PostRepo(JournalContext context)
+        public PostRepo(JournalContext context): base(context)
         {
-            _context = context;
         }
 
         public Post GetPost(int id)
@@ -46,7 +45,11 @@ namespace WebJournal.Data
             {
                 throw new ArgumentNullException(nameof(post));
             }
-            _context.Entry<Post>(p).CurrentValues.SetValues(post);
+            p.Title = post.Title;
+            p.SubTitle = post.SubTitle;
+            p.Description = post.Description;
+            p.CreatedOn = new DateTime();
+            _context.Posts.Update(p);
             _context.SaveChanges();
         }
 
