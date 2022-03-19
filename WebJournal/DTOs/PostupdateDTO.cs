@@ -2,7 +2,7 @@
 
 namespace WebJournal.DTOs
 {
-    public class PostupdateDTO : BaseEntity
+    public class PostupdateDTO
     {
         public string Title { get; set; }
         public string SubTitle { get; set; }

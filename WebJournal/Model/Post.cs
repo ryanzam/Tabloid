@@ -10,7 +10,6 @@ namespace WebJournal.Model
         public string Title { get; set; }
         public string SubTitle { get; set; }
         
-        [Required]
         public string Description { get; set; }
         public List<Comment> Comments { get; set; }
         public Category Category { get; set; }
