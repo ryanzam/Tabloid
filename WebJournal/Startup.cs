@@ -14,7 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WebJournal.Model;
 using AutoMapper;
-using WebJournal.Data;
+using WebJournal.Data.Posts;
+using WebJournal.Data.Categories;
+using WebJournal.Data.Comments;
 
 namespace WebJournal
 {
@@ -42,6 +44,8 @@ namespace WebJournal
             services.AddDbContext<JournalContext>(options => options.UseSqlServer(Configuration.GetConnectionString("JournalConnStr")));
 
             services.AddScoped<IPostRepo, PostRepo>();
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
+            services.AddScoped<ICommentRepo, CommentRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

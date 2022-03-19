@@ -47,7 +47,7 @@ namespace WebJournal.Data
         {
             try
             {
-                return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
+                return await _context.Set<TEntity>().ToListAsync();
             }
             catch (Exception ex)
             {
