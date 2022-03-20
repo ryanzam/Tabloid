@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using WebJournal.Data.Posts;
+using WebJournal.Data;
+using WebJournal.DTOs;
 using WebJournal.Model;
 
 namespace WebJournal.Controllers
@@ -23,46 +24,63 @@ namespace WebJournal.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetPosts()
+        public ActionResult<IEnumerable<PostReadDTO>> GetPosts()
         {
-            var posts = await _repository.GetAllAsync();
-            return Ok(_mapper.Map<IEnumerable<PostModel>>(posts));
+            var posts = _repository.GetPosts();
+            return Ok(_mapper.Map<IEnumerable<PostReadDTO>>(posts));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostModel>> GetPost(int id)
+        public ActionResult<PostReadDTO> GetPost(int id)
         {
-            var post = await _repository.GetByIdAsync(id);
+            var post = _repository.GetPost(id);
             if(post != null)
             {
-                return Ok(_mapper.Map<PostModel>(post));
+                return Ok(_mapper.Map<PostReadDTO>(post));
             }
             return NotFound();
         }
 
         [HttpPost]
-        public async Task<ActionResult<PostModel>> CreatePost([FromBody] PostModel postModel)
+        public ActionResult<PostReadDTO> CreatePost(PostCreateDTO postCreateDTO)
         {
-            var p =  _mapper.Map<Post>(postModel);
-            p.Category = postModel.Category;
-            await _repository.CreateAsync(p);
+            var postModel = _mapper.Map<Post>(postCreateDTO);
+            _repository.CreatePost(postModel);
+            _repository.SaveChanges();
 
-            return Ok();
+            var postReadDTO = _mapper.Map<PostReadDTO>(postModel);
+
+            return CreatedAtRoute(nameof(GetPost), new { Id = postReadDTO.Id }, postReadDTO);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePost(int id,[FromBody] PostModel postModel)
+        public ActionResult UpdatePost(int id, PostupdateDTO postupdateDTO)
         {
-           var p = _mapper.Map<Post>(postModel);
-           await _repository.UpdateAsync(p);
-           return Ok();
+            var postModelRepo = _repository.GetPost(id);
+            if (postModelRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(postupdateDTO, postModelRepo);
+
+            _repository.UpdatePost(postModelRepo);
+            _repository.SaveChanges();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeletePost(int id)
+        public ActionResult DeletePost(int id)
         {
-            var deleted = await _repository.DeleteAsync(id);
-            return Ok(deleted);
+            var postModelRepo = _repository.GetPost(id);
+            if (postModelRepo == null)
+            {
+                return NotFound();
+            }
+            _repository.DeletePost(postModelRepo);
+            _repository.SaveChanges();
+
+            return NoContent();
         }
     }
 }

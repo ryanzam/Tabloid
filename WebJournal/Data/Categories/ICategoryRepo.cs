@@ -2,7 +2,7 @@
 
 namespace WebJournal.Data.Categories
 {
-    public interface ICategoryRepo: IBaseRepository<Category>
+    interface ICategoryRepo: IBaseRepository<Category>
     {
     }
 }
